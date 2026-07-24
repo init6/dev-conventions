@@ -57,6 +57,6 @@ source ~/.zshrc && curl -sS -X PUT "{host}/issues/<番号>.json" \
 
 ## 運用ルール（team-conventions と一致）
 - タスクはまず**起票**し、**着手時**に担当者を自分・ステータス「進行中」に更新する。
-- **完了は PR マージをもって完了**とみなす（手動で「完了」に変えなくてよい）。
+- **PR をマージしたら、紐付く issue をクローズ状態（完了扱い。「終了」「完了」等、名称・ID は環境依存）へ更新する。** ID は `issue_statuses.json` で確認し、`PUT {host}/issues/<番号>.json` の `status_id` を更新する。
 - Claude に作業指示する場合も担当者は**指示者本人**（Claude を担当者にしない）。
 - コミットに `refs #<番号>` を付けると Redmine と自動で関連付く。
