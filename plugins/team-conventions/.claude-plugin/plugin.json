@@ -1,7 +1,7 @@
 {
   "name": "team-conventions",
   "displayName": "チーム共通規約",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "チーム共通の規約（コミット/ブランチ/PR/Redmine/知識共有/Docker/テスト/デプロイ）を毎セッション注入し、着手・起票・PR準備・デプロイ・知識記録のコマンド、Redmine スキル、レビューエージェント、コミット規約フックを提供する",
   "author": {
     "name": "init6"

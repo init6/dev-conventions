@@ -23,6 +23,8 @@ argument-hint: "(任意) PR タイトル"
 2. **push / PR 作成の前に**、要約（ブランチ名・コミット件名・base ブランチ）を提示して実行可否を一言確認する。
 3. PR を作成する: `gh pr create --base <default> --title "<タイトル>" --body "<変更概要>"`。本文末尾に PR 本文規約の 1 行（`🤖 Generated with [Claude Code](https://claude.com/claude-code)`）を含める。
 4. 作成した PR の URL を報告し、レビュー/マージ依頼はリポジトリ担当者へ行う旨を添える。
+5. **紐付く Redmine チケットに PR の URL をコメント追記する**（チケット番号はブランチ名 `task/<番号>` から。`redmine` スキル参照: `PUT {host}/issues/<番号>.json` の `notes`）。チケットと PR の追跡性を保つため。
 
 ## 補足
 - デフォルトブランチへ直接 push しない。変更は必ずこの PR 経由で入れる。
+- **マージ後**は Redmine 運用規約に従い、紐付くチケットをクローズ状態（完了扱い）へ更新する。
