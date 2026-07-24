@@ -7,7 +7,17 @@
 
 | プラグイン | 内容 |
 |-----------|------|
-| `team-conventions` | コミット / ブランチ / PR / Redmine / 知識共有の共通規約を、SessionStart フックで毎セッション文脈に注入する |
+| `team-conventions` | 共通規約（コミット/ブランチ/PR/Redmine/知識共有）を SessionStart フックで毎セッション注入し、着手・PR 準備・Redmine 操作のコマンド/スキルを提供する |
+
+### コマンド / スキル
+
+| 種別 | 名前 | 内容 |
+|------|------|------|
+| コマンド | `/start-task <番号>` | Redmine チケットに着手（担当者=自分・進行中に更新）し、最新デフォルトブランチから `task/<番号>` を作成 |
+| コマンド | `/pr-ready` | デフォルトブランチへ rebase → 1コミットに集約 → push → `refs #<番号>` の PR を作成 |
+| スキル | `redmine` | Redmine の起票/更新/コメント/ID 逆引きを curl で行うレシピ（Redmine 作業時に自動で効く） |
+
+> コマンド/スキルは Redmine のホストやプロジェクト ID を**ハードコードせず**、作業中リポジトリの `CLAUDE.md` から解決する。
 
 ## 導入方法
 
@@ -41,13 +51,18 @@ dev-conventions/
 ├── plugins/
 │   └── team-conventions/
 │       ├── .claude-plugin/plugin.json    # プラグイン定義
-│       ├── rules/                        # 規約 md（正本・レビュー対象）
+│       ├── rules/                        # 規約 md（正本・レビュー対象／毎セッション注入）
 │       │   ├── commit-and-branch.md
 │       │   ├── pr-flow.md
 │       │   ├── redmine.md
 │       │   ├── knowledge-sharing.md
 │       │   ├── docker-workflow.md
 │       │   └── testing.md
+│       ├── commands/                     # スラッシュコマンド
+│       │   ├── start-task.md             # /start-task <番号>
+│       │   └── pr-ready.md               # /pr-ready
+│       ├── skills/                       # スキル（必要時に自動で効く）
+│       │   └── redmine/SKILL.md
 │       ├── hooks/hooks.json              # SessionStart フック
 │       └── scripts/inject-rules.sh       # rules/*.md を連結して注入
 └── README.md
