@@ -1,0 +1,11 @@
+{
+  "description": "チーム共通で許可してよい定番の Bash 操作（無害・高頻度）。apply-permissions.sh で各開発者の .claude/settings.local.json にマージするか、各リポジトリの .claude/settings.json（コミット）に取り込む。強めの権限（本番 SSH デプロイ等）はここに入れず、各リポジトリのプロジェクト固有テンプレで本人 opt-in にする。",
+  "allow": [
+    "Bash(docker compose *)",
+    "Bash(bundle exec rspec *)",
+    "Bash(git *)",
+    "Bash(gh pr *)",
+    "Bash(gh run *)",
+    "Bash(gh api *)"
+  ]
+}
