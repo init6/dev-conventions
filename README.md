@@ -7,17 +7,22 @@
 
 | プラグイン | 内容 |
 |-----------|------|
-| `team-conventions` | 共通規約（コミット/ブランチ/PR/Redmine/知識共有）を SessionStart フックで毎セッション注入し、着手・PR 準備・Redmine 操作のコマンド/スキルを提供する |
+| `team-conventions` | 共通規約（コミット/ブランチ/PR/Redmine/知識共有/Docker/テスト/デプロイ）を SessionStart フックで毎セッション注入し、着手・起票・PR準備・デプロイ・知識記録のコマンド、Redmine スキル、レビューエージェント、コミット規約フックを提供する |
 
-### コマンド / スキル
+### コマンド / スキル / エージェント / フック
 
 | 種別 | 名前 | 内容 |
 |------|------|------|
 | コマンド | `/start-task <番号>` | Redmine チケットに着手（担当者=自分・進行中に更新）し、最新デフォルトブランチから `task/<番号>` を作成 |
+| コマンド | `/new-ticket` | Redmine にチケットを起票（任意で親チケット配下の子チケットに） |
 | コマンド | `/pr-ready` | デフォルトブランチへ rebase → 1コミットに集約 → push → `refs #<番号>` の PR を作成 |
+| コマンド | `/deploy` | Capistrano で本番デプロイ（対象・ブランチを確認してから `cap production deploy`） |
+| コマンド | `/knowledge <メモ>` | 蓄積すべき知見をリポジトリの知識ドキュメント（`docs/knowledge.md` 等）に書式を揃えて追記 |
 | スキル | `redmine` | Redmine の起票/更新/コメント/ID 逆引きを curl で行うレシピ（Redmine 作業時に自動で効く） |
+| エージェント | `reviewer` | 変更差分を規約準拠＋正しさの両面でレビューする読み取り専用エージェント |
+| フック | commit-msg（PreToolUse/Bash） | `git commit` に `refs #<番号>` が無いとき非ブロッキングで注意を注入 |
 
-> コマンド/スキルは Redmine のホストやプロジェクト ID を**ハードコードせず**、作業中リポジトリの `CLAUDE.md` から解決する。
+> コマンド/スキルは Redmine のホストやプロジェクト ID・デプロイ先などの**環境固有値をハードコードせず**、作業中リポジトリの `CLAUDE.md` から解決する。
 
 ## 導入方法
 
@@ -57,14 +62,22 @@ dev-conventions/
 │       │   ├── redmine.md
 │       │   ├── knowledge-sharing.md
 │       │   ├── docker-workflow.md
-│       │   └── testing.md
+│       │   ├── testing.md
+│       │   └── deploy.md
 │       ├── commands/                     # スラッシュコマンド
 │       │   ├── start-task.md             # /start-task <番号>
-│       │   └── pr-ready.md               # /pr-ready
+│       │   ├── new-ticket.md             # /new-ticket
+│       │   ├── pr-ready.md               # /pr-ready
+│       │   ├── deploy.md                 # /deploy
+│       │   └── knowledge.md              # /knowledge <メモ>
 │       ├── skills/                       # スキル（必要時に自動で効く）
 │       │   └── redmine/SKILL.md
-│       ├── hooks/hooks.json              # SessionStart フック
-│       └── scripts/inject-rules.sh       # rules/*.md を連結して注入
+│       ├── agents/                       # サブエージェント
+│       │   └── reviewer.md               # 規約準拠＋正しさのレビュー
+│       ├── hooks/hooks.json              # SessionStart 注入 + PreToolUse コミット規約チェック
+│       └── scripts/
+│           ├── inject-rules.sh           # rules/*.md を連結して注入
+│           └── check-commit-msg.sh       # refs # 欠落を非ブロッキングで注意
 └── README.md
 ```
 

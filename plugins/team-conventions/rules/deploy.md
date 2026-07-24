@@ -1,0 +1,9 @@
+## デプロイ規約
+
+デプロイ方式は **Capistrano に統一**する。
+
+- 本番デプロイは、サーバー上の **deploy 用 runner**（deploy ユーザーが clone したリポジトリ。通常ブランチは `develop`）から `bundle exec cap production deploy` で行う。
+- **Gemfile.lock を変更した後は、runner 側で先に `bundle install` してから `cap` を実行する。** runner は `cap` 自体をその bundle で動かすため、新規/更新 gem 未インストールだと `cap` が `Bundler::GemNotFound` で落ちる（デプロイ先の gem は cap 起動後に入るので別物）。
+- 本番は影響が大きいので、**対象サーバー・ブランチ・実行コマンドを提示して確認してから**実行する。
+- サーバー・runner パス・デプロイ先・環境固有の手順やハマりどころは、**各リポジトリの `CLAUDE.md` / `docs/knowledge.md` を正本**とする（ここには共通の骨子のみ記す）。
+- `db:seed` は破壊的なことが多い（冒頭で全テーブル `delete_all` 等）。本番での再実行は原則しない。
