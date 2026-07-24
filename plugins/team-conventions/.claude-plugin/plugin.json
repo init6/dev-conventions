@@ -1,8 +1,8 @@
 {
   "name": "team-conventions",
   "displayName": "チーム共通規約",
-  "version": "0.1.0",
-  "description": "チーム共通のコミット/ブランチ/PR/Redmine/知識共有の規約を毎セッション文脈に注入する",
+  "version": "0.2.0",
+  "description": "チーム共通の規約（コミット/ブランチ/PR/Redmine/知識共有）を毎セッション注入し、着手・PR 準備・Redmine 操作のコマンド/スキルを提供する",
   "author": {
     "name": "init6"
   },
