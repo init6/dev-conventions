@@ -1,0 +1,13 @@
+{
+  "name": "dev-conventions",
+  "owner": {
+    "name": "init6"
+  },
+  "plugins": [
+    {
+      "name": "team-conventions",
+      "source": "./plugins/team-conventions",
+      "description": "チーム共通のコミット/ブランチ/PR/Redmine/知識共有の規約を毎セッション注入する"
+    }
+  ]
+}

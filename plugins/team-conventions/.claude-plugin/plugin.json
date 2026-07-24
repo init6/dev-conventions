@@ -1,0 +1,11 @@
+{
+  "name": "team-conventions",
+  "displayName": "チーム共通規約",
+  "version": "0.1.0",
+  "description": "チーム共通のコミット/ブランチ/PR/Redmine/知識共有の規約を毎セッション文脈に注入する",
+  "author": {
+    "name": "init6"
+  },
+  "keywords": ["conventions", "redmine", "rules", "workflow"],
+  "hooks": "hooks/hooks.json"
+}
