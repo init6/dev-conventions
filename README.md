@@ -21,6 +21,7 @@
 | コマンド | `/test [パス]` | コンテナ内で RSpec を実行（サービス名解決・test DB 準備込み、ファイル/行指定可） |
 | コマンド | `/land <番号>` | マージ後処理: 紐付く Redmine issue を完了＋（本番がブランチ追従なら）確認付きデプロイ |
 | コマンド | `/my-tickets` | 自分担当/進行中の Redmine チケット一覧 |
+| コマンド | `/setup-permissions` | チーム共通の許可ルール（`permissions.allow`）を各自ローカルに入れる手順を案内 |
 | スキル | `redmine` | Redmine の起票/更新/コメント/ID 逆引きを curl で行うレシピ（Redmine 作業時に自動で効く） |
 | エージェント | `reviewer` | 変更差分を規約準拠＋正しさの両面でレビューする読み取り専用エージェント |
 | フック | commit-msg（PreToolUse/Bash） | `git commit` に `refs #<番号>` が無いとき非ブロッキングで注意を注入 |
@@ -76,17 +77,42 @@ dev-conventions/
 │       │   ├── knowledge.md              # /knowledge <メモ>
 │       │   ├── test.md                   # /test [パス]
 │       │   ├── land.md                   # /land <番号>
-│       │   └── my-tickets.md             # /my-tickets
+│       │   ├── my-tickets.md             # /my-tickets
+│       │   └── setup-permissions.md      # /setup-permissions
 │       ├── skills/                       # スキル（必要時に自動で効く）
 │       │   └── redmine/SKILL.md
 │       ├── agents/                       # サブエージェント
 │       │   └── reviewer.md               # 規約準拠＋正しさのレビュー
+│       ├── permissions/                  # 許可ルールのひな形
+│       │   └── team-allow.json           # チーム共通の allow ルール
 │       ├── hooks/hooks.json              # SessionStart 注入 + PreToolUse コミット規約チェック
 │       └── scripts/
 │           ├── inject-rules.sh           # rules/*.md を連結して注入
-│           └── check-commit-msg.sh       # refs # 欠落を非ブロッキングで注意
+│           ├── check-commit-msg.sh       # refs # 欠落を非ブロッキングで注意
+│           └── apply-permissions.sh      # allow ルールを各自の設定にマージ（本人が実行）
 └── README.md
 ```
+
+## 許可ルールの共有（permissions.allow）
+
+Claude Code の許可ルールをチームで共有し、各開発者が手早く適用するための仕組み。**プラグインは allow ルールを配布できない**（commands/skills/agents/hooks のみ）ため、以下の2方式を使う。
+
+### A. リポジトリの `.claude/settings.json`（コミット・自動共有）
+無害で高頻度の定番許可（`Bash(docker compose *)` / `Bash(bundle exec rspec *)` / `Bash(git *)` / `Bash(gh pr *)` など）は、各リポジトリの `.claude/settings.json` にコミットする。git で全員に自動共有され、**各自の操作は不要**。中身のひな形は [`permissions/team-allow.json`](plugins/team-conventions/permissions/team-allow.json)。
+
+### B. ひな形＋適用スクリプト（各自ローカルに一発 opt-in）
+本番 SSH デプロイ（`Bash(ssh <host> *)`）のような**強め/環境依存の権限**は、全員に無条件で配らず、各開発者が明示的に opt-in する。
+
+- ひな形: [`permissions/team-allow.json`](plugins/team-conventions/permissions/team-allow.json)（またはリポジトリ固有の JSON）
+- 適用（**開発者本人がターミナルで**実行。既定は `.claude/settings.local.json`＝gitignore・冪等）:
+  ```sh
+  bash "${CLAUDE_PLUGIN_ROOT}/scripts/apply-permissions.sh"                 # チーム定番を local へ
+  bash "${CLAUDE_PLUGIN_ROOT}/scripts/apply-permissions.sh" --global        # ~/.claude/settings.json へ
+  bash "${CLAUDE_PLUGIN_ROOT}/scripts/apply-permissions.sh" .claude/allow-rules.deploy.json  # プロジェクト固有の強い権限
+  ```
+- `/setup-permissions` コマンドで、上記の1行コマンドを案内表示できる。
+
+> **なぜ本人実行なのか**: エージェント（Claude）自身が settings を編集して権限を昇格させる操作はブロックされる（自己昇格の防止）。そのため「適用」は必ず開発者本人が行う。
 
 ## 規約の追加・編集
 
