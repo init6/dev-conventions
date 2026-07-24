@@ -66,7 +66,8 @@ dev-conventions/
 │       │   ├── knowledge-sharing.md
 │       │   ├── docker-workflow.md
 │       │   ├── testing.md
-│       │   └── deploy.md
+│       │   ├── deploy.md
+│       │   └── parallel-work.md
 │       ├── commands/                     # スラッシュコマンド
 │       │   ├── start-task.md             # /start-task <番号>
 │       │   ├── new-ticket.md             # /new-ticket
