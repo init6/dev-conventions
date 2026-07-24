@@ -18,6 +18,9 @@
 | コマンド | `/pr-ready` | デフォルトブランチへ rebase → 1コミットに集約 → push → `refs #<番号>` の PR を作成 |
 | コマンド | `/deploy` | Capistrano で本番デプロイ（対象・ブランチを確認してから `cap production deploy`） |
 | コマンド | `/knowledge <メモ>` | 蓄積すべき知見をリポジトリの知識ドキュメント（`docs/knowledge.md` 等）に書式を揃えて追記 |
+| コマンド | `/test [パス]` | コンテナ内で RSpec を実行（サービス名解決・test DB 準備込み、ファイル/行指定可） |
+| コマンド | `/land <番号>` | マージ後処理: 紐付く Redmine issue を完了＋（本番がブランチ追従なら）確認付きデプロイ |
+| コマンド | `/my-tickets` | 自分担当/進行中の Redmine チケット一覧 |
 | スキル | `redmine` | Redmine の起票/更新/コメント/ID 逆引きを curl で行うレシピ（Redmine 作業時に自動で効く） |
 | エージェント | `reviewer` | 変更差分を規約準拠＋正しさの両面でレビューする読み取り専用エージェント |
 | フック | commit-msg（PreToolUse/Bash） | `git commit` に `refs #<番号>` が無いとき非ブロッキングで注意を注入 |
@@ -69,7 +72,10 @@ dev-conventions/
 │       │   ├── new-ticket.md             # /new-ticket
 │       │   ├── pr-ready.md               # /pr-ready
 │       │   ├── deploy.md                 # /deploy
-│       │   └── knowledge.md              # /knowledge <メモ>
+│       │   ├── knowledge.md              # /knowledge <メモ>
+│       │   ├── test.md                   # /test [パス]
+│       │   ├── land.md                   # /land <番号>
+│       │   └── my-tickets.md             # /my-tickets
 │       ├── skills/                       # スキル（必要時に自動で効く）
 │       │   └── redmine/SKILL.md
 │       ├── agents/                       # サブエージェント
