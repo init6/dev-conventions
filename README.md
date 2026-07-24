@@ -45,7 +45,9 @@ dev-conventions/
 │       │   ├── commit-and-branch.md
 │       │   ├── pr-flow.md
 │       │   ├── redmine.md
-│       │   └── knowledge-sharing.md
+│       │   ├── knowledge-sharing.md
+│       │   ├── docker-workflow.md
+│       │   └── testing.md
 │       ├── hooks/hooks.json              # SessionStart フック
 │       └── scripts/inject-rules.sh       # rules/*.md を連結して注入
 └── README.md
