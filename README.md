@@ -114,13 +114,23 @@ Claude Code の許可ルールをチームで共有し、各開発者が手早�
 
 > **なぜ本人実行なのか**: エージェント（Claude）自身が settings を編集して権限を昇格させる操作はブロックされる（自己昇格の防止）。そのため「適用」は必ず開発者本人が行う。
 
+## 課題管理
+
+このリポジトリ自体の課題管理先は Redmine プロジェクト **「開発規約」** (identifier: `dev-conventions`)。
+
+- https://redmine.nasu.ai/projects/dev-conventions
+
+規約の変更・プラグインの修正は、他プロジェクトと同じくここにチケットを起票してから着手する。チケット番号は Redmine 全体で通し番号なので、`refs #<番号>` によるコミットとの自動紐付けもそのまま効く。
+
 ## 規約の追加・編集
 
-1. `plugins/team-conventions/rules/` に md を追加、または既存 md を編集する。
-2. `refs #<番号> ...` 形式でコミットし、PR を出してレビューを受ける（規約自体もレビュー対象）。
-3. 各利用者は `/plugin update team-conventions` → `/reload-plugins` で最新化する。
+1. Redmine プロジェクト `dev-conventions` にチケットを起票する（`/new-ticket` でも可）。
+2. `task/<チケット番号>` ブランチを切る（`/start-task <番号>`）。
+3. `plugins/team-conventions/rules/` に md を追加、または既存 md を編集する。
+4. `refs #<番号> ...` 形式でコミットし、`main` へ PR を出してレビューを受ける（規約自体もレビュー対象）。
+5. 各利用者は `/plugin update team-conventions` → `/reload-plugins` で最新化する。
 
-> Redmine のホストやプロジェクト ID など**環境ごとに異なる値は規約に書かず**、各リポジトリの `CLAUDE.md` 側に委ねる。共通する運用・手順のみここに置く。
+> `plugins/team-conventions/rules/` に置く**規約本文**には、Redmine のホストやプロジェクト ID など**環境ごとに異なる値を書かない**（各リポジトリの `CLAUDE.md` 側に委ねる）。上の「課題管理」は規約本文ではなく**このリポジトリ自身の運用**を示すものなので、ここに具体値を書いてよい。
 
 ## 今後の拡張（案）
 
