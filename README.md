@@ -127,8 +127,29 @@ Claude Code の許可ルールをチームで共有し、各開発者が手早�
 1. Redmine プロジェクト `dev-conventions` にチケットを起票する（`/new-ticket` でも可）。
 2. `task/<チケット番号>` ブランチを切る（`/start-task <番号>`）。
 3. `plugins/team-conventions/rules/` に md を追加、または既存 md を編集する。
-4. `refs #<番号> ...` 形式でコミットし、`main` へ PR を出してレビューを受ける（規約自体もレビュー対象）。
-5. 各利用者は `/plugin update team-conventions` → `/reload-plugins` で最新化する。
+4. **`plugins/team-conventions/.claude-plugin/plugin.json` の `version` を上げる**（下記）。
+5. `refs #<番号> ...` 形式でコミットし、`main` へ PR を出してレビューを受ける（規約自体もレビュー対象）。
+6. 各利用者は下記の手順で最新化する。
+
+### 送り出す側: `version` を上げるのを忘れない
+
+**中身だけ変えて `version` を据え置くと、利用者側の `/plugin update` は「最新です」と言って何も更新しない。** 更新判定はバージョン番号で行われ、実体もバージョン名のディレクトリ（`~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/`）にキャッシュされるため。rules / commands / skills / agents のいずれかを変えたら、必ず `plugin.json` の `version` を上げる。
+
+`claude plugin tag` を使うと、`plugin.json` とマーケットプレイス側の記載が食い違っていないか検証したうえでリリース用の git タグを作れる。
+
+### 受け取る側: この順に実行する
+
+```
+/plugin marketplace update dev-conventions   # marketplace の clone を git pull する
+/plugin update team-conventions              # 新しい version を取り込む
+/reload-plugins                              # 現在のセッションに反映する
+```
+
+**1 行目を飛ばすと古いコミットのまま再インストールされる。** `/plugin update` は marketplace の clone を自分で `git pull` しないため。CLI からは `claude plugin marketplace update dev-conventions` / `claude plugin update team-conventions@dev-conventions` が同等（`/reload-plugins` の代わりにセッション再起動が要る）。反映されたかは実体を見るのが確実。
+
+```sh
+ls ~/.claude/plugins/cache/dev-conventions/team-conventions/   # 新しい version のディレクトリができているか
+```
 
 > `plugins/team-conventions/rules/` に置く**規約本文**には、Redmine のホストやプロジェクト ID など**環境ごとに異なる値を書かない**（各リポジトリの `CLAUDE.md` 側に委ねる）。上の「課題管理」は規約本文ではなく**このリポジトリ自身の運用**を示すものなので、ここに具体値を書いてよい。
 
