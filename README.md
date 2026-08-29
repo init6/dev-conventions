@@ -19,7 +19,7 @@
 | コマンド | `/deploy` | Capistrano で本番デプロイ（対象・ブランチを確認してから `cap production deploy`） |
 | コマンド | `/knowledge <メモ>` | 蓄積すべき知見をリポジトリの知識ドキュメント（`docs/knowledge.md` 等）に書式を揃えて追記 |
 | コマンド | `/test [パス]` | コンテナ内で RSpec を実行（サービス名解決・test DB 準備込み、ファイル/行指定可） |
-| コマンド | `/land <番号>` | マージ後処理: 紐付く Redmine issue を完了＋（本番がブランチ追従なら）確認付きデプロイ |
+| コマンド | `/land <番号>` | マージ後処理: 紐付く Redmine issue を完了＋worktree/ブランチの片付け＋（本番がブランチ追従なら）確認付きデプロイ |
 | コマンド | `/my-tickets` | 自分担当/進行中の Redmine チケット一覧 |
 | コマンド | `/setup-permissions` | チーム共通の許可ルール（`permissions.allow`）を各自ローカルに入れる手順を案内 |
 | スキル | `redmine` | Redmine の起票/更新/コメント/ID 逆引きを curl で行うレシピ（Redmine 作業時に自動で効く） |
